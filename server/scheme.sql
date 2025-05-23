@@ -1,0 +1,2 @@
+CREATE DATABASE sikh_student_association;
+USE sikh_student_association;
