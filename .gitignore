@@ -32,3 +32,6 @@ client/build/
 # OS/IDE
 .DS_Store
 .vscode/
+
+/sikh-student-association.git
+/sikh-student-association.git.bfg-report
