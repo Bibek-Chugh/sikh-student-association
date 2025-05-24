@@ -14,7 +14,7 @@ app.get('/', (req, res) =>{
 
 app.get('/api/mentors', async (req, res) => {
     try{
-        const [rows] = await dw.qiert('SELECT * FROM mentors');
+        const [rows] = await dw.query('SELECT * FROM mentors');
         res.json(rows);
     }catch (error){
         console.error(error);
