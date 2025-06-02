@@ -1,119 +1,121 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './Components/Navbar';
-import Hero from './components/Hero';
-import Filters from './components/Filters';
-import MentorGrid from './components/MentorGrid';
-import AdminLoginModal from './components/AdminLoginModal';
-import AddEditMentorModal from './components/AddEditMentorModal';
-
-const API_BASE_URL = 'http://localhost:5001/api';
+import Hero from './Components/Hero';
+import Filters from './Components/Filters';
+import MentorGrid from './Components/MentorGrid';
+import LoginPage from './Components/LoginPage';
+import AddEditMentorModal from './Components/AddEditMentorModal';
 
 function App() {
     const [mentors, setMentors] = useState([]);
     const [filters, setFilters] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [token, setToken] = useState(sessionStorage.getItem('adminToken'));
-    const [showLogin, setShowLogin] = useState(false);
-    const [showMentorModal, setShowMentorModal] = useState(false);
-    const [editMentor, setEditMentor] = useState(null);
-
-    useEffect(() => {
-        if (token) setIsAdmin(true);
-        fetchMentors();
-    }, [filters, token]);
+    const [token, setToken] = useState(null);
+    const [editingMentor, setEditingMentor] = useState(null);
 
     const fetchMentors = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`${API_BASE_URL}/mentors`, { params: filters });
-            setMentors(response.data);
-            setLoading(false);
-        } catch (err) {
-            console.error(err);
-            setError('Failed to load mentors.');
-            setLoading(false);
+        setLoading(true);
+        let query = '';
+        if (filters) {
+            query = '?' + new URLSearchParams(filters).toString();
         }
+        const res = await fetch(`http://localhost:5001/api/mentors${query}`);
+        const data = await res.json();
+        setMentors(data);
+        setLoading(false);
     };
 
-    const handleLogin = async (username, password) => {
-        try {
-            const res = await axios.post(`${API_BASE_URL}/admin/login`, { username, password });
-            sessionStorage.setItem('adminToken', res.data.token);
-            setToken(res.data.token);
-            setIsAdmin(true);
-            setShowLogin(false);
-        } catch (err) {
-            setError('Login failed.');
-        }
+    useEffect(() => {
+        fetchMentors();
+    }, [filters]);
+
+    const handleLogin = (token) => {
+        setToken(token);
+        setIsAdmin(true);
     };
 
     const handleLogout = () => {
-        sessionStorage.removeItem('adminToken');
         setToken(null);
         setIsAdmin(false);
     };
 
-    const handleAddEditMentor = async (mentorData) => {
-        try {
-            if (editMentor) {
-                await axios.put(`${API_BASE_URL}/mentors/${editMentor.id}`, mentorData, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-            } else {
-                await axios.post(`${API_BASE_URL}/mentors`, mentorData, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-            }
-            setShowMentorModal(false);
-            setEditMentor(null);
+    const handleSaveMentor = async (mentorData) => {
+        const method = mentorData.id ? 'PUT' : 'POST';
+        const url = mentorData.id 
+            ? `http://localhost:5001/api/mentors/${mentorData.id}`
+            : `http://localhost:5001/api/mentors`;
+        const res = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(mentorData)
+        });
+        if (res.ok) {
             fetchMentors();
-        } catch (err) {
-            console.error(err);
-            setError('Failed to save mentor.');
         }
+        setEditingMentor(null);
     };
 
     const handleDeleteMentor = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this mentor?')) return;
-        try {
-            await axios.delete(`${API_BASE_URL}/mentors/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            fetchMentors();
-        } catch (err) {
-            console.error(err);
-            setError('Failed to delete mentor.');
-        }
+        await fetch(`http://localhost:5001/api/mentors/${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        fetchMentors();
     };
 
     return (
-        <div>
-            <Navbar 
-                isAdmin={isAdmin} 
-                onLogin={() => setShowLogin(true)} 
-                onLogout={handleLogout}
-            />
-            <Hero />
-            <Filters setFilters={setFilters} />
-            {error && <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>}
-            <MentorGrid 
-                mentors={mentors} 
-                loading={loading} 
-                isAdmin={isAdmin} 
-                onEdit={(mentor) => { setEditMentor(mentor); setShowMentorModal(true); }} 
-                onDelete={handleDeleteMentor} 
-            />
-            {showLogin && <AdminLoginModal onClose={() => setShowLogin(false)} onLogin={handleLogin} />}
-            {showMentorModal && 
-                <AddEditMentorModal 
-                    onClose={() => { setShowMentorModal(false); setEditMentor(null); }} 
-                    onSave={handleAddEditMentor} 
-                    mentor={editMentor} 
-                />}
-        </div>
+        <Router>
+            <Navbar isAdmin={isAdmin} onLogout={handleLogout} />
+            <Routes>
+                <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+                <Route path="/admin" element={
+                    <>
+                        <Hero />
+                        <Filters setFilters={setFilters} />
+                        {isAdmin && (
+                            <div style={{ textAlign: 'right', padding: '20px' }}>
+                                <button 
+                                    className="btn btn-primary"
+                                    onClick={() => setEditingMentor({})}
+                                >
+                                    Add New Mentor
+                                </button>
+                            </div>
+                        )}
+                        <MentorGrid
+                            mentors={mentors}
+                            loading={loading}
+                            isAdmin={isAdmin}
+                            onEdit={setEditingMentor}
+                            onDelete={handleDeleteMentor}
+                        />
+                        {editingMentor && (
+                            <AddEditMentorModal
+                                mentor={editingMentor}
+                                onClose={() => setEditingMentor(null)}
+                                onSave={handleSaveMentor}
+                            />
+                        )}
+                    </>
+                } />
+                <Route path="/" element={
+                    <>
+                        <Hero />
+                        <Filters setFilters={setFilters} />
+                        <MentorGrid 
+                            mentors={mentors} 
+                            loading={loading} 
+                            isAdmin={false} 
+                        />
+                    </>
+                } />
+            </Routes>
+        </Router>
     );
 }
 

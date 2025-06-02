@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const path = require('path');
 const jwt = require('jsonwebtoken');
 const db = require('./db');
 
@@ -21,47 +22,25 @@ app.get('/', (req, res) => {
     res.send('Mentor API is running');
 });
 
-// Admin registration
-app.post('/api/admin/signup', async (req, res) => {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-        return res.status(400).json({ message: 'Username and password are required' });
-    }
-
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await db.query('INSERT INTO admins (username, password) VALUES (?, ?)', [username, hashedPassword]);
-        res.status(201).json({ message: 'Admin user created successfully' });
-    } catch (error) {
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({ message: 'Username already exists' });
-        }
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// Admin login
+// Admin login (email + plain text password)
 app.post('/api/admin/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-        const [rows] = await db.query('SELECT * FROM admins WHERE username = ?', [username]);
+        const [rows] = await db.query('SELECT * FROM admins WHERE email = ?', [email]);
 
         if (rows.length === 0) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         const admin = rows[0];
-        const passwordMatch = await bcrypt.compare(password, admin.password);
 
-        if (!passwordMatch) {
-            return res.status(401).json({ message: 'Invalid username or password' });
+        // Plain text password check (temporary, no hashing)
+        if (password !== admin.password) {
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Extended token expiry to 24 hours
-        const token = jwt.sign({ id: admin.id, username: admin.username }, JWT_SECRET, { expiresIn: '24h' });
+        const token = jwt.sign({ id: admin.id, email: admin.email }, JWT_SECRET, { expiresIn: '24h' });
         res.json({ token });
     } catch (error) {
         console.error(error);
@@ -71,8 +50,8 @@ app.post('/api/admin/login', async (req, res) => {
 
 // Token refresh endpoint
 app.post('/api/admin/refresh', authenticateAdmin, (req, res) => {
-    const { id, username } = req.user;
-    const newToken = jwt.sign({ id, username }, JWT_SECRET, { expiresIn: '24h' });
+    const { id, email } = req.user;
+    const newToken = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: '24h' });
     res.json({ token: newToken });
 });
 
@@ -82,9 +61,9 @@ function authenticateAdmin(req, res, next) {
     if (!authHeader) return res.status(401).json({ message: 'No token provided' });
 
     const token = authHeader.split(' ')[1];
-    jwt.verify(token, JWT_SECRET, (err, user) => {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) return res.status(403).json({ message: 'Invalid token' });
-        req.user = user;
+        req.user = decoded;
         next();
     });
 }
@@ -183,6 +162,29 @@ app.delete('/api/mentors/:id', authenticateAdmin, async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+});
+
+// Setup multer for storing images
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage });
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static('uploads'));
+
+// Upload endpoint
+app.post('/api/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.json({ imageUrl });
 });
 
 // Centralized error handling
