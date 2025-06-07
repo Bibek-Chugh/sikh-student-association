@@ -173,15 +173,30 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage });
+
+const fileFilter = (req, file, cb) => {
+    // Accept images only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+const upload = multer({ 
+    storage,
+    fileFilter,
+    limits: {
+        fileSize: 150 * 1024 * 1024 // 150MB limit
+    }
+});
 
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
 // Upload endpoint
-app.post('/api/upload', upload.single('image'), (req, res) => {
+app.post('/api/upload', authenticateAdmin, upload.single('image'), (req, res) => {
     if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
+        return res.status(400).json({ message: 'No file uploaded or invalid file type' });
     }
     const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     res.json({ imageUrl });

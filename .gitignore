@@ -35,3 +35,6 @@ client/build/
 
 /sikh-student-association.git
 /sikh-student-association.git.bfg-report
+
+#hide images that users upload
+/uploads/

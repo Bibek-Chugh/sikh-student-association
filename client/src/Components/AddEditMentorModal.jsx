@@ -41,8 +41,12 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
             if (imageFile) {
                 const uploadData = new FormData();
                 uploadData.append('image', imageFile);
-                // Fix: Use the full URL instead of relative path
-                const res = await axios.post('http://localhost:5001/api/upload', uploadData); 
+                const token = sessionStorage.getItem('adminToken');
+                const res = await axios.post('http://localhost:5001/api/upload', uploadData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }); 
                 photo_url = res.data.imageUrl;
             }
 
