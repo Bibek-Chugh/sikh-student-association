@@ -131,16 +131,6 @@ function App() {
             <>
               <Hero />
               <Filters setFilters={setFilters} />
-              {isAdmin && (
-                <div style={{ textAlign: 'right', padding: '20px' }}>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => setEditingMentor({})}
-                  >
-                    Add New Mentor
-                  </button>
-                </div>
-              )}
               <MentorGrid
                 mentors={mentors}
                 loading={loading}
@@ -148,13 +138,36 @@ function App() {
                 onEdit={setEditingMentor}
                 onDelete={handleDeleteMentor}
               />
-              {editingMentor && (
-                <AddEditMentorModal
-                  mentor={editingMentor}
-                  onClose={() => setEditingMentor(null)}
-                  onSave={handleSaveMentor}
-                />
-              )}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '40px 0 0 0' }}>
+                <button
+                  className="btn btn-primary add-mentor-btn"
+                  style={{
+                    background: 'linear-gradient(90deg, #1a2341 0%, #3a4a8c 100%)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    fontSize: '1.2rem',
+                    padding: '14px 36px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    boxShadow: '0 2px 8px rgba(26,35,65,0.08)',
+                    marginBottom: '32px',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s',
+                  }}
+                  onClick={() => setEditingMentor({})}
+                >
+                  Add Mentor
+                </button>
+                {editingMentor && (
+                  <div style={{ width: '100%', maxWidth: 600 }}>
+                    <AddEditMentorModal
+                      mentor={editingMentor}
+                      onClose={() => setEditingMentor(null)}
+                      onSave={handleSaveMentor}
+                    />
+                  </div>
+                )}
+              </div>
             </>
           }
         />

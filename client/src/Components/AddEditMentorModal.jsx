@@ -59,87 +59,80 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h2>{mentor ? 'Edit Mentor' : 'Add New Mentor'}</h2>
-                    <button className="close-button" onClick={onClose}>&times;</button>
+        <div className="modal-overlay" style={{ background: 'none', position: 'static', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', zIndex: 1 }}>
+            <div className="modal-content" style={{ background: '#fff', padding: 32, borderRadius: 16, boxShadow: '0 4px 24px rgba(26,35,65,0.10)', width: '100%', maxWidth: 420, marginTop: 32 }}>
+                <div className="modal-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+                    <h2 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>{mentor ? 'Edit Mentor' : 'Add New Mentor'}</h2>
+                    <button className="close-button" style={{ background: 'none', border: 'none', fontSize: 28, cursor: 'pointer', color: '#888', marginLeft: 12 }} onClick={onClose}>&times;</button>
                 </div>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <input
-                            name="name"
-                            placeholder="Name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            name="email"
-                            type="email"
-                            placeholder="Email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            name="university"
-                            placeholder="University"
-                            value={formData.university}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            name="program"
-                            placeholder="Program"
-                            value={formData.program}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            name="graduation_year"
-                            type="number"
-                            placeholder="Graduation Year"
-                            value={formData.graduation_year}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            name="location"
-                            placeholder="Location"
-                            value={formData.location}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <textarea
-                            name="bio"
-                            placeholder="Bio"
-                            value={formData.bio}
-                            onChange={handleChange}
-                            rows="4"
-                        />
-                    </div>
-                    <div className="modal-footer">
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    <input
+                        name="name"
+                        placeholder="Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="email"
+                        type="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="university"
+                        placeholder="University"
+                        value={formData.university}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="program"
+                        placeholder="Program"
+                        value={formData.program}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="graduation_year"
+                        type="number"
+                        placeholder="Graduation Year"
+                        value={formData.graduation_year}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="location"
+                        placeholder="Location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        style={{ marginBottom: 8 }}
+                    />
+                    <textarea
+                        name="bio"
+                        placeholder="Bio"
+                        value={formData.bio}
+                        onChange={handleChange}
+                        rows="4"
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8, resize: 'vertical' }}
+                    />
+                    <div className="modal-footer" style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 24 }}>
                         <button
                             type="button"
                             className="btn btn-secondary"
                             onClick={onClose}
                             disabled={loading}
+                            style={{ background: '#6c757d', color: '#fff', border: 'none', borderRadius: 6, padding: '10px 24px', fontSize: 16, cursor: 'pointer' }}
                         >
                             Cancel
                         </button>
@@ -147,6 +140,7 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
                             type="submit"
                             className="btn btn-primary"
                             disabled={loading}
+                            style={{ background: '#1a2341', color: '#fff', border: 'none', borderRadius: 6, padding: '10px 24px', fontSize: 16, fontWeight: 600, cursor: 'pointer' }}
                         >
                             {loading ? 'Saving...' : 'Save'}
                         </button>
