@@ -41,7 +41,7 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
             if (imageFile) {
                 const uploadData = new FormData();
                 uploadData.append('image', imageFile);
-                const res = await axios.post('http://localhost:5001/api/upload', uploadData);
+                const res = await axios.post('/api/upload', uploadData); 
                 photo_url = res.data.imageUrl;
             }
 
