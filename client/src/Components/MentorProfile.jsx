@@ -42,16 +42,22 @@ function MentorProfile() {
         <div style={{ fontSize: 18, color: '#444', marginBottom: 32, lineHeight: 1.6, maxWidth: '60ch', wordBreak: 'break-word' }}>{mentor.bio}</div>
         <div style={{ marginBottom: 10 }}>
           <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>JOB TITLE</span>
-          <span style={{ marginLeft: 24 }}>{mentor.program || '-'}</span>
+          <span style={{ marginLeft: 24 }}>{mentor.job_title || '-'}</span>
         </div>
         <div style={{ marginBottom: 10 }}>
           <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMPLOYER</span>
-          <span style={{ marginLeft: 24 }}>{mentor.university || '-'}</span>
+          <span style={{ marginLeft: 24 }}>{mentor.employer || '-'}</span>
         </div>
         <div style={{ marginBottom: 10 }}>
           <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>UNDERGRADUATE</span>
-          <span style={{ marginLeft: 24 }}>{mentor.graduation_year ? `${mentor.graduation_year}` : '-'}</span>
+          <span style={{ marginLeft: 24 }}>{mentor.undergraduate || '-'}</span>
         </div>
+        {mentor.post_graduate && (
+          <div style={{ marginBottom: 10 }}>
+            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>GRADUATE</span>
+            <span style={{ marginLeft: 24 }}>{mentor.post_graduate}</span>
+          </div>
+        )}
         <div style={{ marginBottom: 10 }}>
           <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMAIL</span>
           <span style={{ marginLeft: 24 }}>{mentor.email || '-'}</span>

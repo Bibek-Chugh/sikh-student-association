@@ -106,7 +106,7 @@ app.get('/api/mentors', async (req, res, next) => {
 
 // Admin: Add a new mentor
 app.post('/api/mentors', authenticateAdmin, async (req, res, next) => {
-    const { name, email, university, program, graduation_year, location, gender, religion, bio, photo_url } = req.body;
+    const { name, email, university, job_title, employer, area_professional_focus, area_sikhi_focus, undergraduate, post_graduate, graduation_year, location, favourite_kirtani, favourite_show, favourite_food, favourite_hobby, bio, photo_url } = req.body;
 
     if (!name || !email) {
         return res.status(400).json({ message: 'Name and Email are required' });
@@ -114,9 +114,9 @@ app.post('/api/mentors', authenticateAdmin, async (req, res, next) => {
 
     try {
         await db.query(`
-            INSERT INTO mentors (name, email, university, program, graduation_year, location, gender, religion, bio, photo_url)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [name, email, university, program, graduation_year, location, gender, religion, bio, photo_url]
+            INSERT INTO mentors (name, email, university, job_title, employer, area_professional_focus, area_sikhi_focus, undergraduate, post_graduate, graduation_year, location, favourite_kirtani, favourite_show, favourite_food, favourite_hobby, bio, photo_url)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [name, email, university, job_title, employer, area_professional_focus, area_sikhi_focus, undergraduate, post_graduate, graduation_year, location, favourite_kirtani, favourite_show, favourite_food, favourite_hobby, bio, photo_url]
         );
         res.status(201).json({ message: 'Mentor added successfully' });
     } catch (error) {
@@ -127,14 +127,14 @@ app.post('/api/mentors', authenticateAdmin, async (req, res, next) => {
 // Admin: Edit an existing mentor
 app.put('/api/mentors/:id', authenticateAdmin, async (req, res, next) => {
     const { id } = req.params;
-    const { name, email, university, program, graduation_year, location, gender, religion, bio, photo_url } = req.body;
+    const { name, email, university, job_title, employer, area_professional_focus, area_sikhi_focus, undergraduate, post_graduate, graduation_year, location, favourite_kirtani, favourite_show, favourite_food, favourite_hobby, bio, photo_url } = req.body;
 
     try {
         const [result] = await db.query(`
             UPDATE mentors 
-            SET name = ?, email = ?, university = ?, program = ?, graduation_year = ?, location = ?, gender = ?, religion = ?, bio = ?, photo_url = ?
+            SET name = ?, email = ?, university = ?, job_title = ?, employer = ?, area_professional_focus = ?, area_sikhi_focus = ?, undergraduate = ?, post_graduate = ?, graduation_year = ?, location = ?, favourite_kirtani = ?, favourite_show = ?, favourite_food = ?, favourite_hobby = ?, bio = ?, photo_url = ?
             WHERE id = ?`,
-            [name, email, university, program, graduation_year, location, gender, religion, bio, photo_url, id]
+            [name, email, university, job_title, employer, area_professional_focus, area_sikhi_focus, undergraduate, post_graduate, graduation_year, location, favourite_kirtani, favourite_show, favourite_food, favourite_hobby, bio, photo_url, id]
         );
 
         if (result.affectedRows === 0) {

@@ -6,9 +6,18 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
         name: '',
         email: '',
         university: '',
-        program: '',
+        job_title: '',
+        employer: '',
+        area_professional_focus: '',
+        area_sikhi_focus: '',
+        undergraduate: '',
+        post_graduate: '',
         graduation_year: '',
         location: '',
+        favourite_kirtani: '',
+        favourite_show: '',
+        favourite_food: '',
+        favourite_hobby: '',
         photo_url: '',
         bio: ''
     });
@@ -91,9 +100,72 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
                         style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
                     />
                     <input
-                        name="program"
-                        placeholder="Program"
-                        value={formData.program}
+                        name="job_title"
+                        placeholder="Job Title"
+                        value={formData.job_title}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="employer"
+                        placeholder="Employer"
+                        value={formData.employer}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="area_professional_focus"
+                        placeholder="Area of Professional Focus"
+                        value={formData.area_professional_focus}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="area_sikhi_focus"
+                        placeholder="Area of Sikhi Focus"
+                        value={formData.area_sikhi_focus}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="undergraduate"
+                        placeholder="Undergraduate"
+                        value={formData.undergraduate}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="post_graduate"
+                        placeholder="Post Graduate"
+                        value={formData.post_graduate}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="favourite_kirtani"
+                        placeholder="Favourite Kirtani"
+                        value={formData.favourite_kirtani}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="favourite_show"
+                        placeholder="Favourite Show"
+                        value={formData.favourite_show}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="favourite_food"
+                        placeholder="Favourite Food"
+                        value={formData.favourite_food}
+                        onChange={handleChange}
+                        style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
+                    />
+                    <input
+                        name="favourite_hobby"
+                        placeholder="What is your favourite hobby?"
+                        value={formData.favourite_hobby}
                         onChange={handleChange}
                         style={{ padding: '10px 12px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 16, marginBottom: 8 }}
                     />
