@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 function Filters({ setFilters }) {
     const [showFilters, setShowFilters] = useState(false);
     const [inputs, setInputs] = useState({
-        university: '', program: '', location: '', gender: ''
+        university: '', program: '', location: ''
     });
 
     const handleChange = (e) => {
@@ -13,7 +13,7 @@ function Filters({ setFilters }) {
 
     const applyFilters = () => setFilters(inputs);
     const clearFilters = () => {
-        setInputs({ university: '', program: '', location: '', gender: '' });
+        setInputs({ university: '', program: '', location: '' });
         setFilters({});
     };
 
@@ -37,15 +37,6 @@ function Filters({ setFilters }) {
                     <div className="filter-group">
                         <label>Location</label>
                         <input name="location" value={inputs.location} onChange={handleChange} placeholder="Enter location" />
-                    </div>
-                    <div className="filter-group">
-                        <label>Gender</label>
-                        <select name="gender" value={inputs.gender} onChange={handleChange}>
-                            <option value="">Any</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other</option>
-                        </select>
                     </div>
                 </div>
             )}

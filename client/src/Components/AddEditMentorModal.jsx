@@ -9,8 +9,6 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
         program: '',
         graduation_year: '',
         location: '',
-        gender: '',
-        religion: '',
         photo_url: '',
         bio: ''
     });
@@ -117,26 +115,6 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
                             name="location"
                             placeholder="Location"
                             value={formData.location}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <select
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleChange}
-                        >
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <input
-                            name="religion"
-                            placeholder="Religion"
-                            value={formData.religion}
                             onChange={handleChange}
                         />
                     </div>

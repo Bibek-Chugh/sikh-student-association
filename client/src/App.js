@@ -8,6 +8,7 @@ import Filters from './Components/Filters';
 import MentorGrid from './Components/MentorGrid';
 import LoginPage from './Components/LoginPage';
 import AddEditMentorModal from './Components/AddEditMentorModal';
+import MentorProfile from './Components/MentorProfile';
 
 const API_BASE_URL = 'http://localhost:5001/api';
 
@@ -119,6 +120,10 @@ function App() {
         <Route
           path="/login"
           element={<LoginPage onLogin={handleLogin} />}
+        />
+        <Route
+          path="/mentor/:id"
+          element={<MentorProfile />}
         />
         <Route
           path="/admin"
