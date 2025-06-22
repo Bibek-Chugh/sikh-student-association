@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
 function MentorProfile() {
   const { id } = useParams();
   const [mentor, setMentor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState({
+    submitting: false,
+    success: false,
+    error: null
+  });
 
   useEffect(() => {
     async function fetchMentor() {
@@ -25,6 +35,38 @@ function MentorProfile() {
     }
     fetchMentor();
   }, [id]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus({ submitting: true, success: false, error: null });
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/mentors/${id}/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      setFormStatus({ submitting: false, success: true, error: null });
+      setFormData({ name: '', email: '', message: '' });
+    } catch (err) {
+      setFormStatus({ submitting: false, success: false, error: err.message });
+    }
+  };
 
   // Determine back link based on admin status
   const isAdmin = Boolean(sessionStorage.getItem('adminToken'));
@@ -62,6 +104,95 @@ function MentorProfile() {
           <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMAIL</span>
           <span style={{ marginLeft: 24 }}>{mentor.email || '-'}</span>
         </div>
+
+        {mentor.email && (
+          <div style={{ marginTop: 40, padding: 24, backgroundColor: '#f8f9fa', borderRadius: 8 }}>
+            <h3 style={{ marginBottom: 16, color: '#1a2341' }}>Contact Mentor</h3>
+            {formStatus.success ? (
+              <div style={{ color: 'green', marginBottom: 16 }}>
+                Message sent successfully! The mentor will get back to you soon.
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ display: 'block', marginBottom: 8, color: '#444' }}>Your Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: 4,
+                      border: '1px solid #ddd',
+                      fontSize: 16
+                    }}
+                  />
+                </div>
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ display: 'block', marginBottom: 8, color: '#444' }}>Your Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: 4,
+                      border: '1px solid #ddd',
+                      fontSize: 16
+                    }}
+                  />
+                </div>
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ display: 'block', marginBottom: 8, color: '#444' }}>Message</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: 4,
+                      border: '1px solid #ddd',
+                      fontSize: 16,
+                      resize: 'vertical'
+                    }}
+                  />
+                </div>
+                {formStatus.error && (
+                  <div style={{ color: 'red', marginBottom: 16 }}>
+                    {formStatus.error}
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  disabled={formStatus.submitting}
+                  style={{
+                    padding: '12px 24px',
+                    backgroundColor: '#1a2341',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: 6,
+                    fontSize: 16,
+                    fontWeight: 500,
+                    cursor: formStatus.submitting ? 'not-allowed' : 'pointer',
+                    opacity: formStatus.submitting ? 0.7 : 1
+                  }}
+                >
+                  {formStatus.submitting ? 'Sending...' : 'Send Message'}
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+
         <div style={{ marginTop: 40 }}>
           <Link to={backLink} style={{ color: '#1a2341', textDecoration: 'underline', fontWeight: 500 }}>&larr; Back to all mentors</Link>
         </div>
