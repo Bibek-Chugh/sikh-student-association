@@ -5,17 +5,11 @@ function LoginPage({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        setError('');
-
         try {
-            const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
-            const response = await fetch(`${API_BASE_URL}/admin/login`, {
+            const response = await fetch('http://localhost:5001/api/admin/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })  // 👈 Updated to use email

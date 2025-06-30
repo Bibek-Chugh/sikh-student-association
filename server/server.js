@@ -4,7 +4,9 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const db = require('./db');
+const cloudinary = require('cloudinary').v2;
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -13,6 +15,22 @@ if (!JWT_SECRET) {
     console.error('JWT_SECRET environment variable is required');
     process.exit(1);
 }
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+// Cloudinary setup
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 app.use(cors());
 app.use(express.json());
@@ -164,16 +182,8 @@ app.delete('/api/mentors/:id', authenticateAdmin, async (req, res, next) => {
     }
 });
 
-// Setup multer for storing images
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
+// Setup multer for memory storage (for Cloudinary uploads)
+const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
     // Accept images only
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -181,25 +191,82 @@ const fileFilter = (req, file, cb) => {
     }
     cb(null, true);
 };
-
 const upload = multer({ 
     storage,
     fileFilter,
     limits: {
-        fileSize: 150 * 1024 * 1024 // 150MB limit
+        fileSize: 30 * 1024 * 1024 // 30MB limit
     }
 });
 
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
-// Upload endpoint
-app.post('/api/upload', authenticateAdmin, upload.single('image'), (req, res) => {
+// Upload endpoint (now uploads to Cloudinary)
+app.post('/api/upload', authenticateAdmin, upload.single('image'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded or invalid file type' });
     }
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
+    try {
+        // Wrap Cloudinary upload_stream in a Promise
+        const streamUpload = (fileBuffer) => {
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                });
+                stream.end(fileBuffer);
+            });
+        };
+        const result = await streamUpload(req.file.buffer);
+        res.json({ imageUrl: result.secure_url });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to upload image', error: error.message });
+    }
+});
+
+// Contact mentor endpoint
+app.post('/api/mentors/:id/contact', async (req, res) => {
+    const { id } = req.params;
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ message: 'Name, email, and message are required' });
+    }
+
+    try {
+        // Get mentor's email from database
+        const [mentors] = await db.query('SELECT email, name FROM mentors WHERE id = ?', [id]);
+        
+        if (mentors.length === 0) {
+            return res.status(404).json({ message: 'Mentor not found' });
+        }
+
+        const mentor = mentors[0];
+
+        // Email content
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: mentor.email,
+            subject: `New Mentoring Request from ${name}`,
+            html: `
+                <h2>New Mentoring Request</h2>
+                <p><strong>From:</strong> ${name} (${email})</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+                <hr>
+                <p><em>This message was sent through the Sikh Student Association platform.</em></p>
+            `
+        };
+
+        // Send email
+        await transporter.sendMail(mailOptions);
+
+        res.json({ message: 'Email sent successfully' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ message: 'Failed to send email' });
+    }
 });
 
 // Centralized error handling

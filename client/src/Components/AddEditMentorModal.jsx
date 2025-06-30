@@ -39,19 +39,6 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
         setImageFile(e.target.files[0]);
     };
 
-    const handleImageUpload = async (file) => {
-        const formData = new FormData();
-        formData.append('image', file);
-        
-        const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
-        const res = await axios.post(`${API_BASE_URL}/upload`, formData, {
-            headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('adminToken')}`
-            }
-        }); 
-        return res.data.imageUrl;
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -59,7 +46,15 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
             let photo_url = formData.photo_url;
 
             if (imageFile) {
-                photo_url = await handleImageUpload(imageFile);
+                const uploadData = new FormData();
+                uploadData.append('image', imageFile);
+                const token = sessionStorage.getItem('adminToken');
+                const res = await axios.post('http://localhost:5001/api/upload', uploadData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }); 
+                photo_url = res.data.imageUrl;
             }
 
             await onSave({ ...formData, photo_url });
