@@ -24,6 +24,8 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
     useEffect(() => {
         if (mentor) {
             setFormData(mentor);
@@ -49,7 +51,7 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
                 const uploadData = new FormData();
                 uploadData.append('image', imageFile);
                 const token = sessionStorage.getItem('adminToken');
-                const res = await axios.post('http://localhost:5001/api/upload', uploadData, {
+                const res = await axios.post(`${API_BASE_URL}/upload`, uploadData, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

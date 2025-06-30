@@ -10,7 +10,7 @@ import LoginPage from './Components/LoginPage';
 import AddEditMentorModal from './Components/AddEditMentorModal';
 import MentorProfile from './Components/MentorProfile';
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function App() {
   const [mentors, setMentors] = useState([]);
