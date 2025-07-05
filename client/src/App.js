@@ -182,6 +182,44 @@ function App() {
                 loading={loading}
                 isAdmin={false}
               />
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '60px 20px', 
+                backgroundColor: '#f8f9fa',
+                marginTop: '40px'
+              }}>
+                <div style={{ 
+                  maxWidth: '600px', 
+                  margin: '0 auto',
+                  color: '#1a2341'
+                }}>
+                  <h2 style={{ 
+                    fontSize: '28px', 
+                    fontWeight: '600', 
+                    marginBottom: '16px',
+                    color: '#1a2341'
+                  }}>
+                    Get in Touch
+                  </h2>
+                  <p style={{ 
+                    fontSize: '18px', 
+                    lineHeight: '1.6',
+                    color: '#444'
+                  }}>
+                    Contact us via GMAIL at{' '}
+                    <a 
+                      href="mailto:uofwssa@gmail.com" 
+                      style={{ 
+                        color: '#1a2341', 
+                        fontWeight: '600',
+                        textDecoration: 'underline'
+                      }}
+                    >
+                      uofwssa@gmail.com
+                    </a>
+                  </p>
+                </div>
+              </div>
             </>
           }
         />

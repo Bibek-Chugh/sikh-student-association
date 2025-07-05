@@ -101,6 +101,14 @@ function MentorProfile() {
               <span style={{ marginLeft: 24 }}>{mentor.post_graduate}</span>
             </div>
           )}
+          <div style={{ marginBottom: 10 }}>
+            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>AREA OF PROFESSIONAL FOCUS</span>
+            <span style={{ marginLeft: 24 }}>{mentor.area_professional_focus || '-'}</span>
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>AREA OF SIKHI FOCUS</span>
+            <span style={{ marginLeft: 24 }}>{mentor.area_sikhi_focus || '-'}</span>
+          </div>
           {/* Email removed for privacy */}
 
           {/* FAVOURITES SECTION */}
@@ -109,9 +117,9 @@ function MentorProfile() {
               <h2 style={{ color: '#1a2341', marginBottom: 40, letterSpacing: 2, textAlign: 'left', marginLeft: 400 }}>FAVOURITES</h2>
               <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 40 }}>
                 <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
-                  <div style={{ fontSize: 48, marginBottom: 16 }}>📖</div>
-                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE BOOK</div>
-                  <div>{mentor.favourite_book || '-'}</div>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>🎯</div>
+                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE HOBBY</div>
+                  <div>{mentor.favourite_hobby || '-'}</div>
                 </div>
                 <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
                   <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
@@ -120,8 +128,8 @@ function MentorProfile() {
                 </div>
                 <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
                   <div style={{ fontSize: 48, marginBottom: 16 }}>🎬</div>
-                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE MOVIE</div>
-                  <div>{mentor.favourite_movie || '-'}</div>
+                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE MOVIE/SHOW</div>
+                  <div>{mentor.favourite_movie || mentor.favourite_show || '-'}</div>
                 </div>
                 <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
                   <div style={{ fontSize: 48, marginBottom: 16 }}>🍽️</div>
