@@ -76,133 +76,76 @@ function MentorProfile() {
   if (error || !mentor) return <div style={{textAlign: 'center', marginTop: 40}}>{error || 'Mentor not found'}</div>;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', padding: '40px 0', minHeight: '80vh' }}>
-      <div style={{ flex: 1, maxWidth: 700, paddingRight: 40 }}>
-        <div style={{ color: '#555', fontSize: 22, marginBottom: 8 }}>Meet</div>
-        <div style={{ fontSize: 44, fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>{mentor.name?.toUpperCase()}</div>
-        <div style={{ fontSize: 24, color: '#444', marginBottom: 24 }}>{mentor.location}</div>
-        <div style={{ fontSize: 18, color: '#444', marginBottom: 32, lineHeight: 1.6, maxWidth: '60ch', wordBreak: 'break-word' }}>{mentor.bio}</div>
-        <div style={{ marginBottom: 10 }}>
-          <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>JOB TITLE</span>
-          <span style={{ marginLeft: 24 }}>{mentor.job_title || '-'}</span>
-        </div>
-        <div style={{ marginBottom: 10 }}>
-          <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMPLOYER</span>
-          <span style={{ marginLeft: 24 }}>{mentor.employer || '-'}</span>
-        </div>
-        <div style={{ marginBottom: 10 }}>
-          <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>UNDERGRADUATE</span>
-          <span style={{ marginLeft: 24 }}>{mentor.undergraduate || '-'}</span>
-        </div>
-        {mentor.post_graduate && (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', padding: '40px 0', minHeight: '80vh' }}>
+        <div style={{ flex: 1, maxWidth: 700, paddingRight: 40 }}>
+          <div style={{ color: '#555', fontSize: 22, marginBottom: 8 }}>Meet</div>
+          <div style={{ fontSize: 44, fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>{mentor.name?.toUpperCase()}</div>
+          <div style={{ fontSize: 24, color: '#444', marginBottom: 24 }}>{mentor.location}</div>
+          <div style={{ fontSize: 18, color: '#444', marginBottom: 32, lineHeight: 1.6, maxWidth: '60ch', wordBreak: 'break-word' }}>{mentor.bio}</div>
           <div style={{ marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>GRADUATE</span>
-            <span style={{ marginLeft: 24 }}>{mentor.post_graduate}</span>
+            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>JOB TITLE</span>
+            <span style={{ marginLeft: 24 }}>{mentor.job_title || '-'}</span>
           </div>
-        )}
-        <div style={{ marginBottom: 10 }}>
-          <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMAIL</span>
-          <span style={{ marginLeft: 24 }}>{mentor.email || '-'}</span>
-        </div>
+          <div style={{ marginBottom: 10 }}>
+            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMPLOYER</span>
+            <span style={{ marginLeft: 24 }}>{mentor.employer || '-'}</span>
+          </div>
+          <div style={{ marginBottom: 10 }}>
+            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>UNDERGRADUATE</span>
+            <span style={{ marginLeft: 24 }}>{mentor.undergraduate || '-'}</span>
+          </div>
+          {mentor.post_graduate && (
+            <div style={{ marginBottom: 10 }}>
+              <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>GRADUATE</span>
+              <span style={{ marginLeft: 24 }}>{mentor.post_graduate}</span>
+            </div>
+          )}
+          <div style={{ marginBottom: 10 }}>
+            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMAIL</span>
+            <span style={{ marginLeft: 24 }}>{mentor.email || '-'}</span>
+          </div>
 
-        {mentor.email && (
-          <div style={{ marginTop: 40, padding: 24, backgroundColor: '#f8f9fa', borderRadius: 8 }}>
-            <h3 style={{ marginBottom: 16, color: '#1a2341' }}>Contact Mentor</h3>
-            {formStatus.success ? (
-              <div style={{ color: 'green', marginBottom: 16 }}>
-                Message sent successfully! The mentor will get back to you soon.
+          {/* FAVOURITES SECTION */}
+          <div style={{ marginTop: 40, marginBottom: 40, width: '100%' }}>
+            <div style={{ maxWidth: 1200, margin: '0 0 0 60px', padding: '40px 0', textAlign: 'center' }}>
+              <h2 style={{ color: '#1a2341', marginBottom: 40, letterSpacing: 2, textAlign: 'left', marginLeft: 400 }}>FAVOURITES</h2>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 40 }}>
+                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>📖</div>
+                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE BOOK</div>
+                  <div>{mentor.favourite_book || '-'}</div>
+                </div>
+                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
+                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE KIRTANI</div>
+                  <div>{mentor.favourite_kirtani || '-'}</div>
+                </div>
+                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>🎬</div>
+                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE MOVIE</div>
+                  <div>{mentor.favourite_movie || '-'}</div>
+                </div>
+                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>🍽️</div>
+                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE FOOD</div>
+                  <div>{mentor.favourite_food || '-'}</div>
+                </div>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: 16 }}>
-                  <label style={{ display: 'block', marginBottom: 8, color: '#444' }}>Your Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: 4,
-                      border: '1px solid #ddd',
-                      fontSize: 16
-                    }}
-                  />
-                </div>
-                <div style={{ marginBottom: 16 }}>
-                  <label style={{ display: 'block', marginBottom: 8, color: '#444' }}>Your Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: 4,
-                      border: '1px solid #ddd',
-                      fontSize: 16
-                    }}
-                  />
-                </div>
-                <div style={{ marginBottom: 16 }}>
-                  <label style={{ display: 'block', marginBottom: 8, color: '#444' }}>Message</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    required
-                    rows={4}
-                    style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: 4,
-                      border: '1px solid #ddd',
-                      fontSize: 16,
-                      resize: 'vertical'
-                    }}
-                  />
-                </div>
-                {formStatus.error && (
-                  <div style={{ color: 'red', marginBottom: 16 }}>
-                    {formStatus.error}
-                  </div>
-                )}
-                <button
-                  type="submit"
-                  disabled={formStatus.submitting}
-                  style={{
-                    padding: '12px 24px',
-                    backgroundColor: '#1a2341',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: 6,
-                    fontSize: 16,
-                    fontWeight: 500,
-                    cursor: formStatus.submitting ? 'not-allowed' : 'pointer',
-                    opacity: formStatus.submitting ? 0.7 : 1
-                  }}
-                >
-                  {formStatus.submitting ? 'Sending...' : 'Send Message'}
-                </button>
-              </form>
-            )}
+            </div>
           </div>
-        )}
 
-        <div style={{ marginTop: 40 }}>
-          <Link to={backLink} style={{ color: '#1a2341', textDecoration: 'underline', fontWeight: 500 }}>&larr; Back to all mentors</Link>
+          <div style={{ marginTop: 40 }}>
+            <Link to={backLink} style={{ color: '#1a2341', textDecoration: 'underline', fontWeight: 500 }}>&larr; Back to all mentors</Link>
+          </div>
         </div>
-      </div>
-      <div style={{ flex: '0 0 350px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {mentor.photo_url ? (
-          <img src={mentor.photo_url} alt={mentor.name} style={{ width: 320, height: 320, objectFit: 'cover', borderRadius: 8, border: '6px solid #f5f5f5', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }} />
-        ) : (
-          <div style={{ width: 320, height: 320, background: '#eee', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, color: '#aaa' }}>{mentor.name?.charAt(0)}</div>
-        )}
+        <div style={{ flex: '0 0 350px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {mentor.photo_url ? (
+            <img src={mentor.photo_url} alt={mentor.name} style={{ width: 320, height: 320, objectFit: 'cover', borderRadius: 8, border: '6px solid #f5f5f5', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }} />
+          ) : (
+            <div style={{ width: 320, height: 320, background: '#eee', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, color: '#aaa' }}>{mentor.name?.charAt(0)}</div>
+          )}
+        </div>
       </div>
     </div>
   );
