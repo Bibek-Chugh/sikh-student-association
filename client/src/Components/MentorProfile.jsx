@@ -101,10 +101,7 @@ function MentorProfile() {
               <span style={{ marginLeft: 24 }}>{mentor.post_graduate}</span>
             </div>
           )}
-          <div style={{ marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMAIL</span>
-            <span style={{ marginLeft: 24 }}>{mentor.email || '-'}</span>
-          </div>
+          {/* Email removed for privacy */}
 
           {/* FAVOURITES SECTION */}
           <div style={{ marginTop: 40, marginBottom: 40, width: '100%' }}>
