@@ -72,85 +72,93 @@ function MentorProfile() {
   const isAdmin = Boolean(sessionStorage.getItem('adminToken'));
   const backLink = isAdmin ? '/admin' : '/';
 
-  if (loading) return <div style={{textAlign: 'center', marginTop: 40}}>Loading...</div>;
-  if (error || !mentor) return <div style={{textAlign: 'center', marginTop: 40}}>{error || 'Mentor not found'}</div>;
+  if (loading) return <div className="mentor-profile-loading">Loading...</div>;
+  if (error || !mentor) return <div className="mentor-profile-error">{error || 'Mentor not found'}</div>;
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', padding: '40px 0', minHeight: '80vh' }}>
-        <div style={{ flex: 1, maxWidth: 700, paddingRight: 40 }}>
-          <div style={{ color: '#555', fontSize: 22, marginBottom: 8 }}>Meet</div>
-          <div style={{ fontSize: 44, fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>{mentor.name?.toUpperCase()}</div>
-          <div style={{ fontSize: 24, color: '#444', marginBottom: 24 }}>{mentor.location}</div>
-          <div style={{ fontSize: 18, color: '#444', marginBottom: 32, lineHeight: 1.6, maxWidth: '60ch', wordBreak: 'break-word' }}>{mentor.bio}</div>
-          <div style={{ marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>JOB TITLE</span>
-            <span style={{ marginLeft: 24 }}>{mentor.job_title || '-'}</span>
+    <div className="mentor-profile-container">
+      <div className="mentor-profile-main">
+        <div className="mentor-profile-content">
+          <div className="mentor-profile-meet">Meet</div>
+          <div className="mentor-profile-name">{mentor.name?.toUpperCase()}</div>
+          <div className="mentor-profile-location">{mentor.location}</div>
+          {/* Mobile image - appears after name on mobile */}
+          <div className="mentor-profile-image-wrapper-mobile">
+            {mentor.photo_url ? (
+              <img src={mentor.photo_url} alt={mentor.name} className="mentor-profile-image" />
+            ) : (
+              <div className="mentor-profile-avatar">{mentor.name?.charAt(0)}</div>
+            )}
           </div>
-          <div style={{ marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>EMPLOYER</span>
-            <span style={{ marginLeft: 24 }}>{mentor.employer || '-'}</span>
+          <div className="mentor-profile-bio">{mentor.bio}</div>
+          
+          <div className="mentor-profile-info-row">
+            <span className="mentor-profile-label">JOB TITLE</span>
+            <span className="mentor-profile-value">{mentor.job_title || '-'}</span>
           </div>
-          <div style={{ marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>UNDERGRADUATE</span>
-            <span style={{ marginLeft: 24 }}>{mentor.undergraduate || '-'}</span>
+          <div className="mentor-profile-info-row">
+            <span className="mentor-profile-label">EMPLOYER</span>
+            <span className="mentor-profile-value">{mentor.employer || '-'}</span>
+          </div>
+          <div className="mentor-profile-info-row">
+            <span className="mentor-profile-label">UNDERGRADUATE</span>
+            <span className="mentor-profile-value">{mentor.undergraduate || '-'}</span>
           </div>
           {mentor.post_graduate && (
-            <div style={{ marginBottom: 10 }}>
-              <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>GRADUATE</span>
-              <span style={{ marginLeft: 24 }}>{mentor.post_graduate}</span>
+            <div className="mentor-profile-info-row">
+              <span className="mentor-profile-label">GRADUATE</span>
+              <span className="mentor-profile-value">{mentor.post_graduate}</span>
             </div>
           )}
-          <div style={{ marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>AREA OF PROFESSIONAL FOCUS</span>
-            <span style={{ marginLeft: 24 }}>{mentor.area_professional_focus || '-'}</span>
+          <div className="mentor-profile-info-row">
+            <span className="mentor-profile-label">AREA OF PROFESSIONAL FOCUS</span>
+            <span className="mentor-profile-value">{mentor.area_professional_focus || '-'}</span>
           </div>
-          <div style={{ marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, color: '#1a2341', letterSpacing: 1 }}>AREA OF SIKHI FOCUS</span>
-            <span style={{ marginLeft: 24 }}>{mentor.area_sikhi_focus || '-'}</span>
-          </div>
-          {/* Email removed for privacy */}
-
-          {/* FAVOURITES SECTION */}
-          <div style={{ marginTop: 40, marginBottom: 40, width: '100%' }}>
-            <div style={{ maxWidth: 1200, margin: '0 0 0 60px', padding: '40px 0', textAlign: 'center' }}>
-              <h2 style={{ color: '#1a2341', marginBottom: 40, letterSpacing: 2, textAlign: 'left', marginLeft: 400 }}>FAVOURITES</h2>
-              <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 40 }}>
-                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
-                  <div style={{ fontSize: 48, marginBottom: 16 }}>🎯</div>
-                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE HOBBY</div>
-                  <div>{mentor.favourite_hobby || '-'}</div>
-                </div>
-                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
-                  <div style={{ fontSize: 48, marginBottom: 16 }}>🎧</div>
-                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE KIRTANI</div>
-                  <div>{mentor.favourite_kirtani || '-'}</div>
-                </div>
-                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
-                  <div style={{ fontSize: 48, marginBottom: 16 }}>🎬</div>
-                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE MOVIE/SHOW</div>
-                  <div>{mentor.favourite_movie || mentor.favourite_show || '-'}</div>
-                </div>
-                <div style={{ background: '#fff', borderRadius: 8, boxShadow: '0 2px 8px rgba(26,35,65,0.08)', padding: 32, minWidth: 220, borderTop: '4px solid #ffe066', textAlign: 'center', flex: 1 }}>
-                  <div style={{ fontSize: 48, marginBottom: 16 }}>🍽️</div>
-                  <div style={{ fontWeight: 700, color: '#1a2341', marginBottom: 8 }}>FAVOURITE FOOD</div>
-                  <div>{mentor.favourite_food || '-'}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 40 }}>
-            <Link to={backLink} style={{ color: '#1a2341', textDecoration: 'underline', fontWeight: 500 }}>&larr; Back to all mentors</Link>
+          <div className="mentor-profile-info-row">
+            <span className="mentor-profile-label">AREA OF SIKHI FOCUS</span>
+            <span className="mentor-profile-value">{mentor.area_sikhi_focus || '-'}</span>
           </div>
         </div>
-        <div style={{ flex: '0 0 350px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {/* Desktop image - appears on the right side on desktop */}
+        <div className="mentor-profile-image-wrapper-desktop">
           {mentor.photo_url ? (
-            <img src={mentor.photo_url} alt={mentor.name} style={{ width: 320, height: 320, objectFit: 'cover', borderRadius: 8, border: '6px solid #f5f5f5', boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }} />
+            <img src={mentor.photo_url} alt={mentor.name} className="mentor-profile-image" />
           ) : (
-            <div style={{ width: 320, height: 320, background: '#eee', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, color: '#aaa' }}>{mentor.name?.charAt(0)}</div>
+            <div className="mentor-profile-avatar">{mentor.name?.charAt(0)}</div>
           )}
         </div>
+      </div>
+      {/* FAVOURITES SECTION - outside content for proper centering */}
+      <div className="mentor-profile-favourites-section">
+        <div className="mentor-profile-favourites-wrapper">
+          <h2 className="mentor-profile-favourites-title">FAVOURITES</h2>
+          <div className="mentor-profile-favourites-grid">
+            <div className="mentor-profile-favourite-card">
+              <div className="mentor-profile-favourite-icon">🎯</div>
+              <div className="mentor-profile-favourite-label">FAVOURITE HOBBY</div>
+              <div className="mentor-profile-favourite-value">{mentor.favourite_hobby || '-'}</div>
+            </div>
+            <div className="mentor-profile-favourite-card">
+              <div className="mentor-profile-favourite-icon">🎧</div>
+              <div className="mentor-profile-favourite-label">FAVOURITE KIRTANI</div>
+              <div className="mentor-profile-favourite-value">{mentor.favourite_kirtani || '-'}</div>
+            </div>
+            <div className="mentor-profile-favourite-card">
+              <div className="mentor-profile-favourite-icon">🎬</div>
+              <div className="mentor-profile-favourite-label">FAVOURITE MOVIE/SHOW</div>
+              <div className="mentor-profile-favourite-value">{mentor.favourite_movie || mentor.favourite_show || '-'}</div>
+            </div>
+            <div className="mentor-profile-favourite-card">
+              <div className="mentor-profile-favourite-icon">🍽️</div>
+              <div className="mentor-profile-favourite-label">FAVOURITE FOOD</div>
+              <div className="mentor-profile-favourite-value">{mentor.favourite_food || '-'}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Back link - below favourites */}
+      <div className="mentor-profile-back-link">
+        <Link to={backLink} className="mentor-profile-back">&larr; Back to all mentors</Link>
       </div>
     </div>
   );
