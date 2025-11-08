@@ -8,16 +8,6 @@ function MentorProfile() {
   const [mentor, setMentor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [formStatus, setFormStatus] = useState({
-    submitting: false,
-    success: false,
-    error: null
-  });
 
   useEffect(() => {
     async function fetchMentor() {
@@ -35,38 +25,6 @@ function MentorProfile() {
     }
     fetchMentor();
   }, [id]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormStatus({ submitting: true, success: false, error: null });
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/mentors/${id}/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      setFormStatus({ submitting: false, success: true, error: null });
-      setFormData({ name: '', email: '', message: '' });
-    } catch (err) {
-      setFormStatus({ submitting: false, success: false, error: err.message });
-    }
-  };
 
   // Determine back link based on admin status
   const isAdmin = Boolean(sessionStorage.getItem('adminToken'));
