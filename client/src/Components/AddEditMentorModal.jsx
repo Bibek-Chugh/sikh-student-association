@@ -24,7 +24,7 @@ function AddEditMentorModal({ onClose, onSave, mentor }) {
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://sikh-student-association-production.up.railway.app/api';
 
     useEffect(() => {
         if (mentor) {
